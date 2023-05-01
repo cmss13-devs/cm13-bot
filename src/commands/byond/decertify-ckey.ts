@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { queryDatabase } from '../../lib/byond/query-db';
+import { queryDatabase } from '../../lib/byond/queryGame';
 
 @ApplyOptions<Command.Options>({
 	description: 'Decertify a CKEY.'
@@ -19,7 +19,7 @@ export class UserCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		if (!process.env.GUILD || !process.env.VERIFIED) return;
+		if (!process.env.GUILD || !process.env.VERIFIED_ROLE) return;
 
 		await interaction.reply('Contacting database...');
 
@@ -33,6 +33,6 @@ export class UserCommand extends Command {
 
 		const guild = interaction.client.guilds.cache.get(process.env.GUILD);
 
-		return await guild?.members.cache.get(data.data.discord_id)?.roles.remove(process.env.VERIFIED);
+		return await guild?.members.cache.get(data.data.discord_id)?.roles.remove(process.env.VERIFIED_ROLE);
 	}
 }

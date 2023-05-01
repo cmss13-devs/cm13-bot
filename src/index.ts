@@ -3,6 +3,14 @@ import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { createTopicConnection } from 'http2byond';
 import { container } from '@sapphire/framework';
+import type { RedisClientType } from 'redis';
+import { createClient } from 'redis';
+import { ingestTextChat } from './lib/redis/ingestTextChannel';
+import { ingestAccess } from './lib/redis/ingestAccess';
+import { ingestRoundUpdate } from './lib/redis/ingestRoundUpdate';
+import { ingestConnection } from './lib/redis/ingestConnection';
+import { ingestTicket } from './lib/redis/ingestTicket';
+import { ingestLogs } from './lib/redis/ingestLogs';
 
 const client = new SapphireClient({
 	defaultPrefix: '!',
@@ -15,7 +23,7 @@ const client = new SapphireClient({
 	intents: [
 		GatewayIntentBits.DirectMessageReactions,
 		GatewayIntentBits.DirectMessages,
-		GatewayIntentBits.GuildBans,
+		GatewayIntentBits.GuildModeration,
 		GatewayIntentBits.GuildEmojisAndStickers,
 		GatewayIntentBits.GuildMembers,
 		GatewayIntentBits.GuildMessageReactions,
@@ -33,22 +41,48 @@ container.byondConnection = createTopicConnection({
 	port: 1337
 });
 
+container.redisPub = createClient({
+	url: process.env.REDISURL
+});
+container.redisSub = createClient({
+	url: process.env.REDISURL
+});
+
 const main = async () => {
 	try {
-		client.logger.info('Logging in');
+		client.logger.info('Logging in.');
 		await client.login();
-		client.logger.info('Logged in');
+		client.logger.info('Logged in.');
 	} catch (error) {
 		client.logger.fatal(error);
 		client.destroy();
 		process.exit(1);
 	}
+
+	if (process.env.REDIS_URL) setupRedis();
 };
 
 main();
 
+const setupRedis = async () => {
+	const { redisPub, redisSub } = container;
+
+	redisPub.connect();
+	redisSub.connect();
+
+	redisSub.subscribe('byond.msay', ingestTextChat);
+	redisSub.subscribe('byond.asay', ingestTextChat);
+	redisSub.subscribe('byond.access', ingestAccess);
+	redisSub.subscribe('byond.round', ingestRoundUpdate);
+	redisSub.subscribe('byond.meta', ingestConnection);
+	redisSub.subscribe('byond.ticket', ingestTicket);
+	redisSub.subscribe('byond.log.cm13-live.admin', ingestLogs);
+};
+
 declare module '@sapphire/pieces' {
 	interface Container {
 		byondConnection: any;
+		redisSub: RedisClientType;
+		redisPub: RedisClientType;
 	}
 }

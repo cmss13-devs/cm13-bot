@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { queryDatabase } from '../../lib/byond/query-db';
+import { queryDatabase } from '../../lib/byond/queryGame';
 
 @ApplyOptions<Command.Options>({
 	description: 'Lookup a User.'
