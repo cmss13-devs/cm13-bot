@@ -55,8 +55,8 @@ const unlockLrc = async () => {
 
 	webhook.send({
 		embeds: [newEmbed],
-		username: 'Working Joe',
-		avatarURL: 'https://cdn.cm13.site/original/1X/8718c8db0b6d4735d896d7c58a772d2c919f2168.png'
+		username: process.env.WEBHOOK_NAME,
+		avatarURL: process.env.WEBHOOK_PROFILE
 	});
 };
 
@@ -88,7 +88,7 @@ const lockLrc = async () => {
 
 	webhook.send({
 		embeds: [newEmbed],
-		username: 'Working Joe',
-		avatarURL: 'https://cdn.cm13.site/original/1X/8718c8db0b6d4735d896d7c58a772d2c919f2168.png'
+		username: process.env.WEBHOOK_NAME,
+		avatarURL: process.env.WEBHOOK_PROFILE
 	});
 };
