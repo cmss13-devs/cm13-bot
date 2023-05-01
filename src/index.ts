@@ -53,7 +53,7 @@ const main = async () => {
 		process.exit(1);
 	}
 
-	if (process.env.REDIS_URL) setupRedis();
+	if (process.env.REDISURL) setupRedis();
 };
 
 main();
