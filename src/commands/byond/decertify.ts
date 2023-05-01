@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { queryDatabase } from '../../lib/byond/queryGame';
+import { userMention } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
 	description: 'Decertify a User.'
@@ -19,14 +20,21 @@ export class UserCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+		if (!process.env.GUILD || !process.env.VERIFIED_ROLE) return;
+
 		await interaction.reply('Contacting database...');
 
 		const user = interaction.options.getUser('user', true);
 
-		const data = await queryDatabase('decertify_by_discord_id', { discord_id: user.id });
+		const data = await queryDatabase('decertify_discord_id', { discord_id: user.id });
 
-		return await interaction.editReply({
-			content: data['response']
-		});
+		if (data.statuscode !== 200) {
+			return await interaction.editReply({ content: `Decertification unsuccessful: ${data.response}` });
+		}
+
+		await interaction.editReply({ content: `Decertification successful: ${userMention(user.id)} (${data.data.ckey}) decertified.` });
+
+		const guild = interaction.client.guilds.cache.get(process.env.GUILD);
+		return await guild?.members.cache.get(user.id)?.roles.remove(process.env.VERIFIED_ROLE);
 	}
 }

@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { queryDatabase } from '../../lib/byond/queryGame';
+import { userMention } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
 	description: 'Lookup a CKEY.'
@@ -25,8 +26,12 @@ export class UserCommand extends Command {
 
 		const data = await queryDatabase('lookup_ckey', { ckey: ckey });
 
+		if (data.statuscode !== 200) {
+			return await interaction.editReply({ content: `Lookup unsuccessful: ${data.response}` });
+		}
+
 		return await interaction.editReply({
-			content: `${data.response} ${data.data.discord_id ? `<@${data.data.discord_id}>` : ''}`
+			content: `${data.response} User: ${userMention(data.data.discord_id)}`
 		});
 	}
 }

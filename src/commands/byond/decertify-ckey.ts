@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { queryDatabase } from '../../lib/byond/queryGame';
+import { userMention } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
 	description: 'Decertify a CKEY.'
@@ -25,10 +26,14 @@ export class UserCommand extends Command {
 
 		const ckey = interaction.options.getString('ckey', true);
 
-		const data = await queryDatabase('decertify_by_ckey', { ckey: ckey });
+		const data = await queryDatabase('decertify_ckey', { ckey: ckey });
+
+		if (data.statuscode !== 200) {
+			return await interaction.editReply({ content: `Decertification unsuccessful: ${data.response}` });
+		}
 
 		await interaction.editReply({
-			content: data['response']
+			content: `Decertification successful: ${userMention(data.data.discord_id)} (${ckey}) de-certified.`
 		});
 
 		const guild = interaction.client.guilds.cache.get(process.env.GUILD);

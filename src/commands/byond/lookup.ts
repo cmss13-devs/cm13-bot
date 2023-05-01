@@ -25,8 +25,12 @@ export class UserCommand extends Command {
 
 		const data = await queryDatabase('lookup_discord_id', { discord_id: user.id });
 
+		if (data.statuscode !== 200) {
+			return await interaction.editReply({ content: `Lookup unsuccessful: ${data.response}` });
+		}
+
 		return await interaction.editReply({
-			content: `${data.response} ${data.data.ckey}`
+			content: `${data.response} CKEY: ${data.data.ckey}`
 		});
 	}
 }

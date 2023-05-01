@@ -21,15 +21,21 @@ export class UserCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		if (!process.env.CERT_CHANNEL || !process.env.GUILD || !process.env.VERIFIED_ROLE) return;
 
-		await interaction.reply('Contacting database...');
+		await interaction.reply({ content: 'Contacting database...', ephemeral: true });
 
 		const token = interaction.options.getString('token', true);
 
 		const data = await queryDatabase('certify', { identifier: token, discord_id: interaction.user.id });
 
-		await interaction.editReply({
-			content: data['response']
-		});
+		if (data.statuscode === 503) {
+			return await interaction.editReply({ content: `You are already certified, ${data.data.ckey}.` });
+		}
+
+		if (data.statuscode !== 200) {
+			return await interaction.editReply({ content: `There was an issue with your certification. Please try again, or use a valid token.` });
+		}
+
+		await interaction.editReply({ content: `Your certification was successful.` });
 
 		const guild = interaction.client.guilds.cache.get(process.env.GUILD);
 		const channel = guild?.channels.cache.get(process.env.CERT_CHANNEL);

@@ -1,7 +1,6 @@
 import './lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
-import { createTopicConnection } from 'http2byond';
 import { container } from '@sapphire/framework';
 import type { RedisClientType } from 'redis';
 import { createClient } from 'redis';
@@ -32,13 +31,8 @@ const client = new SapphireClient({
 		GatewayIntentBits.GuildVoiceStates,
 		GatewayIntentBits.MessageContent
 	],
-	partials: [Partials.Channel],
+	partials: [Partials.Channel, Partials.GuildMember],
 	loadMessageCommandListeners: true
-});
-
-container.byondConnection = createTopicConnection({
-	host: '127.0.0.1',
-	port: 1337
 });
 
 container.redisPub = createClient({
@@ -81,7 +75,6 @@ const setupRedis = async () => {
 
 declare module '@sapphire/pieces' {
 	interface Container {
-		byondConnection: any;
 		redisSub: RedisClientType;
 		redisPub: RedisClientType;
 	}
