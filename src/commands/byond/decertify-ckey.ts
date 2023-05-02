@@ -21,16 +21,6 @@ export class UserCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		if (
-			!process.env.GUILD ||
-			!process.env.VERIFIED_ROLE ||
-			!process.env.CERTIFIED_ROLE ||
-			!process.env.SYNTHETIC_ROLE ||
-			!process.env.COMMANDER_ROLE ||
-			!process.env.YAUTJA_ROLE
-		)
-			return;
-
 		await interaction.reply('Contacting database...');
 
 		const ckey = interaction.options.getString('ckey', true);
