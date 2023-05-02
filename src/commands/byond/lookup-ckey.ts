@@ -31,7 +31,7 @@ export class UserCommand extends Command {
 		}
 
 		return await interaction.editReply({
-			content: `${data.response} User: ${userMention(data.data.discord_id)}`
+			content: `${data.response} User: ${userMention(data.data.discord_id)} ${data.data.roles ? `Held Whitelists: ${data.data.roles}` : ''}`
 		});
 	}
 }

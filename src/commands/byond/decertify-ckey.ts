@@ -2,6 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { queryDatabase } from '../../lib/byond/queryGame';
 import { userMention } from 'discord.js';
+import { removeAllRoles } from '../../lib/discord/removeAllRoles';
 
 @ApplyOptions<Command.Options>({
 	description: 'Decertify a CKEY.'
@@ -20,7 +21,15 @@ export class UserCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		if (!process.env.GUILD || !process.env.VERIFIED_ROLE) return;
+		if (
+			!process.env.GUILD ||
+			!process.env.VERIFIED_ROLE ||
+			!process.env.CERTIFIED_ROLE ||
+			!process.env.SYNTHETIC_ROLE ||
+			!process.env.COMMANDER_ROLE ||
+			!process.env.YAUTJA_ROLE
+		)
+			return;
 
 		await interaction.reply('Contacting database...');
 
@@ -36,8 +45,9 @@ export class UserCommand extends Command {
 			content: `Decertification successful: ${userMention(data.data.discord_id)} (${ckey}) de-certified.`
 		});
 
-		const guild = interaction.client.guilds.cache.get(process.env.GUILD);
+		const user = interaction.client.users.cache.get(data.data.discord_id);
+		if (!user) return;
 
-		return await guild?.members.cache.get(data.data.discord_id)?.roles.remove(process.env.VERIFIED_ROLE);
+		return await removeAllRoles(user);
 	}
 }

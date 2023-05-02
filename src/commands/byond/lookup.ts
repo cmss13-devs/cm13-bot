@@ -30,7 +30,7 @@ export class UserCommand extends Command {
 		}
 
 		return await interaction.editReply({
-			content: `${data.response} CKEY: ${data.data.ckey}`
+			content: `${data.response} CKEY: ${data.data.ckey} ${data.data.roles ? `Held Whitelists: ${data.data.roles}` : ''}`
 		});
 	}
 }

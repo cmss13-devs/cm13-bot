@@ -2,6 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { queryDatabase } from '../../lib/byond/queryGame';
 import { userMention } from 'discord.js';
+import { removeAllRoles } from '../../lib/discord/removeAllRoles';
 
 @ApplyOptions<Command.Options>({
 	description: 'Decertify a User.'
@@ -34,7 +35,6 @@ export class UserCommand extends Command {
 
 		await interaction.editReply({ content: `Decertification successful: ${userMention(user.id)} (${data.data.ckey}) decertified.` });
 
-		const guild = interaction.client.guilds.cache.get(process.env.GUILD);
-		return await guild?.members.cache.get(user.id)?.roles.remove(process.env.VERIFIED_ROLE);
+		return await removeAllRoles(user);
 	}
 }
