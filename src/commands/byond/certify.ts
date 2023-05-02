@@ -35,6 +35,8 @@ export class UserCommand extends Command {
 					?.roles.add(process.env.VERIFIED_ROLE);
 				return await interaction.editReply({ content: `You are already certified, ${data.data.ckey}.` });
 			}
+
+			return await interaction.editReply({ content: `Please supply a valid token - you are not already certified.` });
 		}
 
 		const data = await queryDatabase('certify', { identifier: token, discord_id: interaction.user.id });
