@@ -13,7 +13,7 @@ export class UserCommand extends Command {
 			builder
 				.setName(this.name)
 				.setDescription(this.description)
-				.addStringOption((option) => option.setName('token').setDescription('The token retrieved from the game.').setRequired(true))
+				.addStringOption((option) => option.setName('token').setDescription('The token retrieved from the game.').setRequired(false))
 		);
 	}
 
@@ -23,11 +23,27 @@ export class UserCommand extends Command {
 
 		await interaction.reply({ content: 'Contacting database...', ephemeral: true });
 
-		const token = interaction.options.getString('token', true);
+		const token = interaction.options.getString('token', false);
+
+		if (!token) {
+			const data = await queryDatabase('lookup_discord_id', { discord_id: interaction.user.id });
+
+			if (data.statuscode === 200) {
+				await interaction.client.guilds.cache
+					.get(process.env.GUILD)
+					?.members.cache.get(interaction.user.id)
+					?.roles.add(process.env.VERIFIED_ROLE);
+				return await interaction.editReply({ content: `You are already certified, ${data.data.ckey}.` });
+			}
+		}
 
 		const data = await queryDatabase('certify', { identifier: token, discord_id: interaction.user.id });
 
 		if (data.statuscode === 503) {
+			await interaction.client.guilds.cache
+				.get(process.env.GUILD)
+				?.members.cache.get(interaction.user.id)
+				?.roles.add(process.env.VERIFIED_ROLE);
 			return await interaction.editReply({ content: `You are already certified, ${data.data.ckey}.` });
 		}
 
