@@ -23,7 +23,7 @@ export class NewJoin extends Listener<typeof Events.GuildMemberAdd> {
 		embed.setDescription(
 			`Hey ${userMention(
 				member.id
-			)}, we require you to verify in game before you are able to talk in this server. To follow this process, head to https://cm-ss13.com/wiki/Discord_Verification. This process requires a minimum of 160 minutes playtime total to complete.`
+			)}, we require you to verify in game before you are able to talk in this server. To follow this process, head to https://cm-ss13.com/wiki/Discord_Verification. This process requires a minimum of 180 minutes playtime total to complete.`
 		);
 		embed.setColor('Green');
 		embed.setTimestamp();
