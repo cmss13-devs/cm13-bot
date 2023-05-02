@@ -19,8 +19,7 @@ export class NewJoin extends Listener<typeof Events.GuildMemberAdd> {
 		if (!(sendChannel instanceof TextChannel)) return;
 
 		const embed = new EmbedBuilder();
-		embed.setAuthor({ name: 'Welcome to CM-SS13', iconURL: `${member.guild.iconURL}` });
-		embed.setTitle('Welcome to CM-SS13');
+		embed.setAuthor({ name: 'Welcome to CM-SS13' });
 		embed.setDescription(
 			`Hey ${userMention(
 				member.id
