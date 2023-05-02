@@ -29,6 +29,11 @@ export class UserCommand extends Command {
 			const data = await queryDatabase('lookup_discord_id', { discord_id: interaction.user.id });
 
 			if (data.statuscode === 200) {
+				if (process.env.CERTIFIED_ROLE)
+					await interaction.client.guilds.cache
+						.get(process.env.GUILD)
+						?.members.cache.get(interaction.user.id)
+						?.roles.add(process.env.CERTIFIED_ROLE);
 				await interaction.client.guilds.cache
 					.get(process.env.GUILD)
 					?.members.cache.get(interaction.user.id)
@@ -42,6 +47,11 @@ export class UserCommand extends Command {
 		const data = await queryDatabase('certify', { identifier: token, discord_id: interaction.user.id });
 
 		if (data.statuscode === 503) {
+			if (process.env.CERTIFIED_ROLE)
+				await interaction.client.guilds.cache
+					.get(process.env.GUILD)
+					?.members.cache.get(interaction.user.id)
+					?.roles.add(process.env.CERTIFIED_ROLE);
 			await interaction.client.guilds.cache
 				.get(process.env.GUILD)
 				?.members.cache.get(interaction.user.id)
@@ -61,6 +71,8 @@ export class UserCommand extends Command {
 		if (!(channel instanceof TextChannel)) return;
 
 		await channel.send(`Certification for <@${interaction.user.id}> complete. Associated CKEYs: ${data['data']['related_ckeys']}.`);
+		if (process.env.CERTIFIED_ROLE)
+			interaction.client.guilds.cache.get(process.env.GUILD)?.members.cache.get(interaction.user.id)?.roles.add(process.env.CERTIFIED_ROLE);
 		return await interaction.guild?.members.cache.get(interaction.user.id)?.roles.add(process.env.VERIFIED_ROLE);
 	}
 }
