@@ -4,7 +4,7 @@ export interface ByondQuery {
 	query: string;
 }
 
-export const queryDatabase = async (query: string, additional: object) => {
+export const queryDatabase = async (query: string, additional?: object) => {
 	if (!process.env.AUTH_TOKEN || !process.env.SOURCE || !process.env.SERVER_HOST || !process.env.SERVER_PORT || !query) return;
 
 	const data = await sendTopic({

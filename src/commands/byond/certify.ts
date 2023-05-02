@@ -33,7 +33,9 @@ export class UserCommand extends Command {
 			if (data.statuscode === 200) {
 				await setupRoles(interaction.user, data.data.roles);
 				await logCertify(
-					`Re-certification for ${userMention(interaction.user.id)} complete. ${data.data.roles ? `Whitelists: ${data.data.roles}` : ''}`
+					`Re-certification for ${userMention(interaction.user.id)} (${data.data.ckey}) complete. ${
+						data.data.roles ? `Whitelists: ${data.data.roles}` : ''
+					}`
 				);
 				return await interaction.editReply({ content: `You are already certified, ${data.data.ckey}.` });
 			}
@@ -46,8 +48,8 @@ export class UserCommand extends Command {
 		if (data.statuscode === 503) {
 			await setupRoles(interaction.user, data.data.roles);
 			await logCertify(
-				`Re-certification for ${userMention(interaction.user.id)} complete. ${
-					data.data.related_ckeys ? `Associated CKEYs: ${data.data.related_ckeys}.` : ''
+				`Re-certification for ${userMention(interaction.user.id)} (${data.data.ckey}) complete. ${
+					data.data.related_ckeys ? `Associated CKEYs: ${data.data.related_ckeys}` : ''
 				} ${data.data.roles ? `Whitelists: ${data.data.roles}` : ''}`
 			);
 			return await interaction.editReply({ content: `You are already certified, ${data.data.ckey}.` });
@@ -60,8 +62,8 @@ export class UserCommand extends Command {
 		await interaction.editReply({ content: `Your certification was successful.` });
 
 		await logCertify(
-			`Certification for ${userMention(interaction.user.id)} complete. ${
-				data.data.related_ckeys ? `Associated CKEYs: ${data.data.related_ckeys}.` : ''
+			`Certification for ${userMention(interaction.user.id)} (${data.data.ckey}) complete. ${
+				data.data.related_ckeys ? `Associated CKEYs: ${data.data.related_ckeys}` : ''
 			} ${data.data.roles ? `Whitelists: ${data.data.roles}` : ''}`
 		);
 		await setupRoles(interaction.user, data.data.roles);
