@@ -16,18 +16,19 @@
 		"@sapphire/plugin-logger": "^3.0.3",
 		"@sapphire/plugin-subcommands": "^4.0.1",
 		"@sapphire/time-utilities": "^1.7.9",
+		"@sapphire/ts-config": "^4.0.0",
 		"@sapphire/type": "^2.4.0",
 		"@sapphire/utilities": "^3.11.1",
 		"@skyra/env-utilities": "^1.2.0",
 		"colorette": "^2.0.20",
 		"discord.js": "^14.9.0",
 		"http2byond": "^2.2.0",
-		"redis": "^4.6.6"
+		"redis": "^4.6.6",
+		"typescript": "^5.0.4"
 	},
 	"devDependencies": {
 		"@sapphire/cli": "^1.6.0",
 		"@sapphire/prettier-config": "^1.4.5",
-		"@sapphire/ts-config": "^4.0.0",
 		"@types/node": "^18.16.1",
 		"@types/ws": "^8.5.4",
 		"eslint": "^8.2.0",
@@ -42,8 +43,7 @@
 		"prettier": "^2.8.8",
 		"prettier-eslint": "^15.0.1",
 		"prettier-eslint-cli": "^7.1.0",
-		"tsc-watch": "^6.0.0",
-		"typescript": "^5.0.4"
+		"tsc-watch": "^6.0.0"
 	},
 	"scripts": {
 		"sapphire": "sapphire",
