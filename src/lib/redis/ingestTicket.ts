@@ -2,11 +2,11 @@ import { EmbedBuilder, TextChannel } from 'discord.js';
 import { container } from '@sapphire/framework';
 
 export const ingestTicket = async (message: string, channel: string) => {
-	if (!process.env.MOD_CHANNEL || !channel) return;
+	if (!process.env.TICKET_CHANNEL || !channel) return;
 
 	const { client } = container;
 
-	const channelToUse = client.channels.cache.get(process.env.MOD_CHANNEL);
+	const channelToUse = client.channels.cache.get(process.env.TICKET_CHANNEL);
 	if (!channelToUse || !(channelToUse instanceof TextChannel)) return;
 
 	const data = JSON.parse(message);
