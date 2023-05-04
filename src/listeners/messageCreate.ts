@@ -6,6 +6,8 @@ import { container } from '@sapphire/framework';
 
 export class UserEvent extends Listener<typeof Events.MessageCreate> {
 	public async run(message: Message) {
+		if (!process.env.REDISURL) return;
+
 		if (message.author.id == message.client.id) return;
 
 		if (message.author.bot) return;

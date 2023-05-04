@@ -28,6 +28,10 @@ export class NewJoin extends Listener<typeof Events.GuildMemberAdd> {
 		embed.setColor('Green');
 		embed.setTimestamp();
 
-		sendChannel.send({ embeds: [embed], content: userMention(member.id) });
+		const button = new EmbedBuilder().setDescription(
+			`Click here </certify:${process.env.CERTIFY_ID}> to certify and paste your token. If you've already certified, you can just run </certify:${process.env.CERTIFY_ID}> without a token.`
+		);
+
+		sendChannel.send({ embeds: [embed, button], content: userMention(member.id) });
 	}
 }

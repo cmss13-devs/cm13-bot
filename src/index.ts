@@ -12,7 +12,7 @@ import { ingestTicket } from './lib/redis/ingestTicket';
 import { ingestLogs } from './lib/redis/ingestLogs';
 
 const client = new SapphireClient({
-	defaultPrefix: '!',
+	defaultPrefix: '/',
 	regexPrefix: /^(hey +)?bot[,! ]/i,
 	caseInsensitiveCommands: true,
 	logger: {
