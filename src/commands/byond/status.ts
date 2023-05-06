@@ -2,6 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { queryDatabase } from '../../lib/byond/queryGame';
 import { EmbedBuilder } from '@discordjs/builders';
+import { isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 
 const formatDuration = (ms: number) => {
 	if (ms < 0) ms = -ms;
@@ -44,6 +45,8 @@ export class UserCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+		if(!isGuildBasedChannel(interaction.channel)) return
+
 		await interaction.reply('Contacting database...');
 
 		const data = await queryDatabase('status_authed');

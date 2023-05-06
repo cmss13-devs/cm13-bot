@@ -6,6 +6,7 @@ import { removeAllRoles } from '../../lib/discord/removeAllRoles';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { failQuery } from '../../lib/byond/failQuery';
 import { addRoles } from '../../lib/discord/addRoles';
+import { isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 
 @ApplyOptions<Command.Options>({
 	description: 'Decertify a User.'
@@ -46,6 +47,8 @@ export class UserCommand extends Subcommand {
 
 	// slash command
 	public async userDecertifyRun(interaction: Command.ChatInputCommandInteraction) {
+		if(!isGuildBasedChannel(interaction.channel)) return
+
 		await interaction.deferReply();
 
 		const user = interaction.options.getUser('user', true);
@@ -56,6 +59,8 @@ export class UserCommand extends Subcommand {
 	}
 
 	public async ckeyDecertifyRun(interaction: Command.ChatInputCommandInteraction) {
+		if(!isGuildBasedChannel(interaction.channel)) return
+
 		await interaction.deferReply();
 
 		const ckey = interaction.options.getString('ckey', true);
