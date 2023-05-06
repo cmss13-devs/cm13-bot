@@ -1,6 +1,7 @@
 import type { User } from 'discord.js';
 import { processWhitelist } from './processWhitelist';
 import { addRoles } from '../discord/addRoles';
+import { removeRole } from '../discord/removeRole';
 
 export const setupRoles = async (user: User, roles: Array<string>) => {
 	if (!process.env.VERIFIED_ROLE) return;
@@ -17,4 +18,5 @@ export const setupRoles = async (user: User, roles: Array<string>) => {
 	}
 	rolesToAdd.push(process.env.VERIFIED_ROLE);
 	await addRoles(user, rolesToAdd);
+	if (process.env.WAITING_ROLE) await removeRole(user, process.env.WAITING_ROLE);
 };
