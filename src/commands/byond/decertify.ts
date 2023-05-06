@@ -5,6 +5,7 @@ import { EmbedBuilder, userMention } from 'discord.js';
 import { removeAllRoles } from '../../lib/discord/removeAllRoles';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { failQuery } from '../../lib/byond/failQuery';
+import { addRoles } from '../../lib/discord/addRoles';
 
 @ApplyOptions<Command.Options>({
 	description: 'Decertify a User.'
@@ -79,6 +80,7 @@ export class UserCommand extends Subcommand {
 		const user = interaction.client.users.cache.get(data.data.discord_id);
 		if (!user) return;
 
+		if (process.env.WAITING_ROLE) await addRoles(user, [process.env.WAITING_ROLE]);
 		return await removeAllRoles(user);
 	}
 }
