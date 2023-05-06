@@ -2,7 +2,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { queryDatabase } from '../../lib/byond/queryGame';
 import { EmbedBuilder } from '@discordjs/builders';
-import { isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 
 const formatDuration = (ms: number) => {
 	if (ms < 0) ms = -ms;
@@ -45,7 +44,7 @@ export class UserCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		if(!isGuildBasedChannel(interaction.channel)) return
+		if(!interaction.guild || interaction.guild.id !== process.env.GUILD) return
 
 		await interaction.reply('Contacting database...');
 

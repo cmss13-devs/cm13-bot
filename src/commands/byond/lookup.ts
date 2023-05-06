@@ -5,7 +5,6 @@ import { Subcommand } from '@sapphire/plugin-subcommands';
 import { EmbedBuilder, roleMention, userMention } from 'discord.js';
 import { processWhitelist } from '../../lib/byond/processWhitelist';
 import { failQuery } from '../../lib/byond/failQuery';
-import { isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 
 @ApplyOptions<Command.Options>({
 	description: 'Lookup a User.'
@@ -46,7 +45,7 @@ export class UserCommand extends Subcommand {
 
 	// slash command
 	public async userLookupRun(interaction: Subcommand.ChatInputCommandInteraction) {
-		if(!isGuildBasedChannel(interaction.channel)) return
+		if(!interaction.guild || interaction.guild.id !== process.env.GUILD) return
 
 		await interaction.deferReply();
 
@@ -58,7 +57,7 @@ export class UserCommand extends Subcommand {
 	}
 
 	public async ckeyLookupRun(interaction: Command.ChatInputCommandInteraction) {
-		if(!isGuildBasedChannel(interaction.channel)) return
+		if(!interaction.guild || interaction.guild.id !== process.env.GUILD) return
 
 		await interaction.deferReply();
 
