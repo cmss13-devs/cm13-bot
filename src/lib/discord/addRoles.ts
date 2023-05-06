@@ -1,10 +1,8 @@
 import { container } from '@sapphire/framework';
 import type { User } from 'discord.js';
 
-export const addRoles = async (user: User, roles: Array<string> | null) => {
+export const addRoles = async (user: User, roles: Array<string> | null, reason?: string) => {
 	if (!process.env.GUILD || !roles) return;
 
-	for (let role of roles) {
-		container.client.guilds.cache.get(process.env.GUILD)?.members.cache.get(user.id)?.roles.add(role);
-	}
+	container.client.guilds.cache.get(process.env.GUILD)?.members.cache.get(user.id)?.roles.add(roles, reason);
 };

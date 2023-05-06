@@ -53,7 +53,7 @@ export class UserCommand extends Command {
 			const data = await queryDatabase('lookup_discord_id', { discord_id: user.id });
 
 			if (data.statuscode === 200) {
-				await setupRoles(user, data.data.roles);
+				await setupRoles(user, data.data.roles, `Re-certified ${data.data.ckey}`);
 				await logCertify(
 					`Re-certification for ${userMention(user.id)} (${data.data.ckey}) complete. ${
 						data.data.roles ? `Whitelists: ${data.data.roles}` : ''
@@ -68,7 +68,7 @@ export class UserCommand extends Command {
 		const data = await queryDatabase('certify', { identifier: token, discord_id: user.id });
 
 		if (data.statuscode === 503) {
-			await setupRoles(user, data.data.roles);
+			await setupRoles(user, data.data.roles, `Re-certified ${data.data.ckey}`);
 			await logCertify(
 				`Re-certification for ${userMention(user.id)} (${data.data.ckey}) complete. ${
 					data.data.related_ckeys ? `Associated CKEYs: ${data.data.related_ckeys}` : ''
@@ -88,7 +88,7 @@ export class UserCommand extends Command {
 				data.data.related_ckeys ? `Associated CKEYs: ${data.data.related_ckeys}` : ''
 			} ${data.data.roles ? `Whitelists: ${data.data.roles}` : ''}`
 		);
-		await setupRoles(user, data.data.roles);
+		await setupRoles(user, data.data.roles, `Certified ${data.data.ckey}`);
 		return await intOrMsg.guild?.members.cache.get(user.id)?.roles.add(process.env.VERIFIED_ROLE);
 	}
 }
