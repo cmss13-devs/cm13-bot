@@ -44,7 +44,7 @@ export class UserCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		if(!interaction.guild || interaction.guild.id !== process.env.GUILD) return
+		if(!interaction.guild || interaction.guild.id !== process.env.CM13_BOT_DISCORD_GUILD) return
 
 		await interaction.reply('Contacting database...');
 

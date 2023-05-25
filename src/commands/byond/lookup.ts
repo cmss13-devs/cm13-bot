@@ -45,7 +45,7 @@ export class UserCommand extends Subcommand {
 
 	// slash command
 	public async userLookupRun(interaction: Subcommand.ChatInputCommandInteraction) {
-		if(!interaction.guild || interaction.guild.id !== process.env.GUILD) return
+		if(!interaction.guild || interaction.guild.id !== process.env.CM13_BOT_DISCORD_GUILD) return
 
 		await interaction.deferReply();
 
@@ -57,7 +57,7 @@ export class UserCommand extends Subcommand {
 	}
 
 	public async ckeyLookupRun(interaction: Command.ChatInputCommandInteraction) {
-		if(!interaction.guild || interaction.guild.id !== process.env.GUILD) return
+		if(!interaction.guild || interaction.guild.id !== process.env.CM13_BOT_DISCORD_GUILD) return
 
 		await interaction.deferReply();
 

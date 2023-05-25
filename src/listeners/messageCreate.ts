@@ -6,7 +6,7 @@ import { container } from '@sapphire/framework';
 
 export class UserEvent extends Listener<typeof Events.MessageCreate> {
 	public async run(message: Message) {
-		if (!process.env.REDISURL) return;
+		if (!process.env.CM13_BOT_REDIS_URL) return;
 
 		if (message.author.id == message.client.id) return;
 
@@ -20,7 +20,7 @@ export class UserEvent extends Listener<typeof Events.MessageCreate> {
 
 		const { redisPub } = container;
 
-		if (message.channel.id === process.env.MOD_CHANNEL)
+		if (message.channel.id === process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL)
 			redisPub.publish(
 				'byond.msay',
 				JSON.stringify({
@@ -31,7 +31,7 @@ export class UserEvent extends Listener<typeof Events.MessageCreate> {
 				})
 			);
 
-		if (message.channel.id === process.env.ADMIN_CHANNEL)
+		if (message.channel.id === process.env.CM13_BOT_DISCORD_GUILD_ADMIN_CHANNEL)
 			redisPub.publish(
 				'byond.asay',
 				JSON.stringify({

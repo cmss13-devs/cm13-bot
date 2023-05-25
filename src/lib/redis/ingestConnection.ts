@@ -2,7 +2,7 @@ import { EmbedBuilder, TextChannel } from 'discord.js';
 import { container } from '@sapphire/framework';
 
 export const ingestConnection = async (message: string, channel: string) => {
-	if (!process.env.MOD_CHANNEL) return;
+	if (!process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL) return;
 
 	if (!message || !channel) return;
 
@@ -10,7 +10,7 @@ export const ingestConnection = async (message: string, channel: string) => {
 
 	const data = JSON.parse(message);
 
-	const channel_msay = client.channels.cache.get(process.env.MOD_CHANNEL);
+	const channel_msay = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
 
 	if (!(channel_msay instanceof TextChannel)) return;
 

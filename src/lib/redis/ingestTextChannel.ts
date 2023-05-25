@@ -2,15 +2,15 @@ import { EmbedBuilder, TextChannel } from 'discord.js';
 import { container } from '@sapphire/framework';
 
 export const ingestTextChat = async (message: string, channel: string) => {
-	if (!process.env.MOD_CHANNEL || !process.env.ADMIN_CHANNEL) return;
+	if (!process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD_ADMIN_CHANNEL) return;
 
 	const { client } = container;
 
 	let channelToUse;
 
-	if (channel == 'byond.msay') channelToUse = client.channels.cache.get(process.env.MOD_CHANNEL);
+	if (channel == 'byond.msay') channelToUse = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
 
-	if (channel == 'byond.asay') channelToUse = client.channels.cache.get(process.env.ADMIN_CHANNEL);
+	if (channel == 'byond.asay') channelToUse = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_ADMIN_CHANNEL);
 
 	if (!channelToUse) return;
 

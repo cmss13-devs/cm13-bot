@@ -21,7 +21,7 @@ export class UserCommand extends Command {
 	}
 
 	public async messageRun(message: Message, args: Args) {
-		if (!process.env.CERT_CHANNEL || !process.env.GUILD || !process.env.VERIFIED_ROLE) return;
+		if (!process.env.CM13_BOT_DISCORD_GUILD_CERT_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD || !process.env.CM13_BOT_DISCORD_GUILD_VERIFIED_ROLE) return;
 
 		const reply = await message.reply('Processing certification...');
 		await message.delete();
@@ -37,7 +37,7 @@ export class UserCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		if (!process.env.CERT_CHANNEL || !process.env.GUILD || !process.env.VERIFIED_ROLE) return;
+		if (!process.env.CM13_BOT_DISCORD_GUILD_CERT_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD || !process.env.CM13_BOT_DISCORD_GUILD_VERIFIED_ROLE) return;
 
 		await interaction.deferReply({ ephemeral: true });
 
@@ -47,7 +47,7 @@ export class UserCommand extends Command {
 	}
 
 	public async runCertify(intOrMsg: Command.ChatInputCommandInteraction | Message, user: User, token?: string | null) {
-		if (!process.env.CERT_CHANNEL || !process.env.GUILD || !process.env.VERIFIED_ROLE) return;
+		if (!process.env.CM13_BOT_DISCORD_GUILD_CERT_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD || !process.env.CM13_BOT_DISCORD_GUILD_VERIFIED_ROLE) return;
 
 		if (!token) {
 			const data = await queryDatabase('lookup_discord_id', { discord_id: user.id });
@@ -89,6 +89,6 @@ export class UserCommand extends Command {
 			} ${data.data.roles ? `Whitelists: ${data.data.roles}` : ''}`
 		);
 		await setupRoles(user, data.data.roles, `Certified ${data.data.ckey}`);
-		return await intOrMsg.guild?.members.cache.get(user.id)?.roles.add(process.env.VERIFIED_ROLE);
+		return await intOrMsg.guild?.members.cache.get(user.id)?.roles.add(process.env.CM13_BOT_DISCORD_GUILD_VERIFIED_ROLE);
 	}
 }

@@ -46,7 +46,7 @@ export class UserCommand extends Subcommand {
 
 	// slash command
 	public async userDecertifyRun(interaction: Command.ChatInputCommandInteraction) {
-		if(!interaction.guild || interaction.guild.id !== process.env.GUILD) return
+		if(!interaction.guild || interaction.guild.id !== process.env.CM13_BOT_DISCORD_GUILD) return
 
 		await interaction.deferReply();
 
@@ -58,7 +58,7 @@ export class UserCommand extends Subcommand {
 	}
 
 	public async ckeyDecertifyRun(interaction: Command.ChatInputCommandInteraction) {
-		if(!interaction.guild || interaction.guild.id !== process.env.GUILD) return
+		if(!interaction.guild || interaction.guild.id !== process.env.CM13_BOT_DISCORD_GUILD) return
 
 		await interaction.deferReply();
 
@@ -84,7 +84,7 @@ export class UserCommand extends Subcommand {
 		const user = interaction.client.users.cache.get(data.data.discord_id);
 		if (!user) return;
 
-		if (process.env.WAITING_ROLE) await addRoles(user, [process.env.WAITING_ROLE]);
+		if (process.env.CM13_BOT_DISCORD_GUILD_WAITING_ROLE) await addRoles(user, [process.env.CM13_BOT_DISCORD_GUILD_WAITING_ROLE]);
 		return await removeAllRoles(user);
 	}
 }

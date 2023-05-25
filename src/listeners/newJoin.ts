@@ -11,11 +11,11 @@ export class NewJoin extends Listener<typeof Events.GuildMemberAdd> {
 		});
 	}
 	public async run(member: GuildMember) {
-		if (!process.env.JOIN_CHANNEL || !process.env.GUILD || member.guild.id !== process.env.GUILD) {
+		if (!process.env.CM13_BOT_DISCORD_GUILD_JOIN_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD || member.guild.id !== process.env.CM13_BOT_DISCORD_GUILD) {
 			return;
 		}
 
-		const sendChannel = member.client.guilds.cache.get(process.env.GUILD)?.channels.cache.get(process.env.JOIN_CHANNEL);
+		const sendChannel = member.client.guilds.cache.get(process.env.CM13_BOT_DISCORD_GUILD)?.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_JOIN_CHANNEL);
 		if (!(sendChannel instanceof TextChannel)) return;
 
 		const embed = new EmbedBuilder();
@@ -29,7 +29,7 @@ export class NewJoin extends Listener<typeof Events.GuildMemberAdd> {
 		embed.setTimestamp();
 
 		const button = new EmbedBuilder().setDescription(
-			`Click here </certify:${process.env.CERTIFY_ID}> to certify and paste your token. If you've already certified, you can just run </certify:${process.env.CERTIFY_ID}> without a token.`
+			`Click here </certify:${process.env.CM13_BOT_DISCORD_COMMAND_CERTIFY_ID}> to certify and paste your token. If you've already certified, you can just run </certify:${process.env.CM13_BOT_DISCORD_COMMAND_CERTIFY_ID}> without a token.`
 		);
 
 		sendChannel.send({ embeds: [embed, button], content: userMention(member.id) });

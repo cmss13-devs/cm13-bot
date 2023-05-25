@@ -36,10 +36,10 @@ const client = new SapphireClient({
 });
 
 container.redisPub = createClient({
-	url: process.env.REDISURL
+	url: process.env.CM13_BOT_REDIS_URL
 });
 container.redisSub = createClient({
-	url: process.env.REDISURL
+	url: process.env.CM13_BOT_REDIS_URL
 });
 
 const main = async () => {
@@ -53,7 +53,7 @@ const main = async () => {
 		process.exit(1);
 	}
 
-	if (process.env.REDISURL) setupRedis();
+	if (process.env.CM13_BOT_REDIS_URL) setupRedis();
 };
 
 main();
@@ -77,5 +77,6 @@ declare module '@sapphire/pieces' {
 	interface Container {
 		redisSub: RedisClientType;
 		redisPub: RedisClientType;
+		processingEnquiry: boolean;
 	}
 }

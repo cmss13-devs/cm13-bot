@@ -2,13 +2,13 @@ import { TextChannel } from 'discord.js';
 import { container } from '@sapphire/framework';
 
 export const ingestLogs = async (message: string, channel: string) => {
-	if (!process.env.LOG_CHANNEL) return;
+	if (!process.env.CM13_BOT_DISCORD_GUILD_LOG_CHANNEL) return;
 
 	if (!message || !channel) return;
 
 	const { client } = container;
 
-	const channelLogs = client.channels.cache.get(process.env.LOG_CHANNEL);
+	const channelLogs = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_LOG_CHANNEL);
 
 	if (!(channelLogs instanceof TextChannel)) return;
 
