@@ -1,5 +1,5 @@
 services:
-  cm13-bot:
+  discord:
     build: 
       context: .
     restart: always
