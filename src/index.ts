@@ -45,7 +45,7 @@ container.redisSub = createClient({
 const main = async () => {
 	try {
 		client.logger.info('Logging in.');
-		await client.login(process.env.CM13_DISCORD_TOKEN);
+		await client.login(process.env.CM13_BOT_DISCORD_TOKEN);
 		client.logger.info('Logged in.');
 	} catch (error) {
 		client.logger.fatal(error);
