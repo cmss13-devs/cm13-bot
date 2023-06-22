@@ -16,9 +16,9 @@ export const ingestAccess = async (message: string, channel: string) => {
 
 	if(process.env.CM13_BOT_DISCORD_EMOJI_RED && process.env.CM13_BOT_DISCORD_EMOJI_GREEN) {
 		const emojiToSend = `${data.type === 'login' ? formatEmoji(process.env.CM13_BOT_DISCORD_EMOJI_GREEN) : formatEmoji(process.env.CM13_BOT_DISCORD_EMOJI_RED)}`
-		const sourceString = `${data.key}@${data.source}`
+		const sourceString = `\`${data.key}\`@\`${data.source}\``
 		const body = `Logged ${data.type === 'login' ? 'in' : 'out'} with ${data.remaining} staff online. (${data.afk} AFK)`
-		channelToUse.send(`${emojiToSend} \`${sourceString}\`: \`${body}\``)
+		channelToUse.send(`${emojiToSend} ${sourceString}: ${body}`)
 		return
 	}
 
