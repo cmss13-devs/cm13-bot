@@ -1,4 +1,4 @@
-import { EmbedBuilder, TextChannel } from 'discord.js';
+import { EmbedBuilder, TextChannel, formatEmoji } from 'discord.js';
 import { container } from '@sapphire/framework';
 import { Time } from '@sapphire/duration';
 
@@ -16,6 +16,11 @@ export const ingestRoundUpdate = async (message: string, channel: string) => {
 
 	const channel_msay = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
 	if (!channel_msay || !(channel_msay instanceof TextChannel)) return;
+
+	if(process.env.CM13_BOT_DISCORD_EMOJI_BLUE) {
+		channel_msay.send(`${formatEmoji(process.env.CM13_BOT_DISCORD_EMOJI_BLUE)} Round Update@${data.source}: ${data.type === 'round-complete' ? 'Round Completed' : 'Round Started'}`)
+		return
+	}
 
 	const newEmbed = new EmbedBuilder();
 	newEmbed.setDescription(data['type'] === 'round-complete' ? 'Round Completed' : 'Round Started');
