@@ -6,9 +6,14 @@ import { container } from '@sapphire/framework';
 
 export class UserEvent extends Listener<typeof Events.MessageCreate> {
 	public async run(message: Message) {
-		if(process.env.CM13_BOT_PUBLISH_CHANNEL && message.channelId === process.env.CM13_BOT_PUBLISH_CHANNEL) {
-			message.crosspost()
-			return
+		if (process.env.CM13_BOT_PUBLISH_CHANNEL && message.channelId === process.env.CM13_BOT_PUBLISH_CHANNEL) {
+			message.crosspost();
+			return;
+		}
+
+		if (process.env.CM13_BOT_THREAD_CHANNEL && message.channelId === process.env.CM13_BOT_THREAD_CHANNEL) {
+			message.startThread({ name: `${message.embeds[0].author}` });
+			return;
 		}
 
 		if (!process.env.CM13_BOT_REDIS_URL) return;
