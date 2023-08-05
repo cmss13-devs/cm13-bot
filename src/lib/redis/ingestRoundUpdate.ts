@@ -17,9 +17,13 @@ export const ingestRoundUpdate = async (message: string, channel: string) => {
 	const channel_msay = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
 	if (!channel_msay || !(channel_msay instanceof TextChannel)) return;
 
-	if(process.env.CM13_BOT_DISCORD_EMOJI_BLUE) {
-		channel_msay.send(`${formatEmoji(process.env.CM13_BOT_DISCORD_EMOJI_BLUE)} \`Round Update\`@\`${data.source}\`: ${data.type === 'round-complete' ? 'Round Completed' : 'Round Started'}`)
-		return
+	if (process.env.CM13_BOT_DISCORD_EMOJI_BLUE) {
+		channel_msay.send(
+			`${formatEmoji(process.env.CM13_BOT_DISCORD_EMOJI_BLUE)} \`Round Update\`@\`${data.source}\`: ${
+				data.type === 'round-complete' ? 'Round Completed' : 'Round Started'
+			}`
+		);
+		return;
 	}
 
 	const newEmbed = new EmbedBuilder();
@@ -32,8 +36,9 @@ export const ingestRoundUpdate = async (message: string, channel: string) => {
 	channel_msay.send({ embeds: [newEmbed] });
 };
 
-const unlockLrc = async () => {
-	if (!process.env.CM13_BOT_DISCORD_GUILD_TALK_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD || !process.env.CM13_BOT_DISCORD_GUILD_TOGGLE_ROLE) return;
+export const unlockLrc = async () => {
+	if (!process.env.CM13_BOT_DISCORD_GUILD_TALK_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD || !process.env.CM13_BOT_DISCORD_GUILD_TOGGLE_ROLE)
+		return;
 
 	const { client } = container;
 
@@ -65,8 +70,9 @@ const unlockLrc = async () => {
 	});
 };
 
-const lockLrc = async () => {
-	if (!process.env.CM13_BOT_DISCORD_GUILD_TALK_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD || !process.env.CM13_BOT_DISCORD_GUILD_TOGGLE_ROLE) return;
+export const lockLrc = async () => {
+	if (!process.env.CM13_BOT_DISCORD_GUILD_TALK_CHANNEL || !process.env.CM13_BOT_DISCORD_GUILD || !process.env.CM13_BOT_DISCORD_GUILD_TOGGLE_ROLE)
+		return;
 
 	const { client } = container;
 
