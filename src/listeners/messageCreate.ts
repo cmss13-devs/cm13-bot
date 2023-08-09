@@ -12,7 +12,7 @@ export class UserEvent extends Listener<typeof Events.MessageCreate> {
 		}
 
 		if (process.env.CM13_BOT_THREAD_CHANNEL && message.channelId === process.env.CM13_BOT_THREAD_CHANNEL) {
-			message.startThread({ name: `${message.embeds.length ? message.embeds[0].author : '@unknown'}` });
+			message.startThread({ name: `${message.embeds.length ? message.embeds[0].author?.name : '@unknown'}` });
 			return;
 		}
 
