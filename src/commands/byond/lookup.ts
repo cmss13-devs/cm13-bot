@@ -94,10 +94,10 @@ export class UserCommand extends Subcommand {
 			embed.addFields({ name: 'Total Playtime:', value: `${data.data.total_minutes} minutes` });
 		}
 
-		if (data.data.notes && data.data.notes.length) {
+		if (data.data.notes) {
 			let noteString = '**All Notes:**\n\n'
 			for (let noteType in data.data.notes) {
-				noteString += `${getNoteTypeFromNumber(noteType)} Notes:\n`
+				noteString += `**${getNoteTypeFromNumber(noteType)} Notes:**\n`
 
 				for(let note of data.data.notes[noteType]) {
 					noteString += `${note}\n\n`
