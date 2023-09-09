@@ -95,15 +95,36 @@ export class UserCommand extends Subcommand {
 		}
 
 		if (data.data.notes && data.data.notes.length) {
-			let noteString = '**Notes:**\n';
-			for (let note of data.data.notes) {
-				noteString += `${note}\n\n`;
+			let noteString = '**All Notes:**\n\n'
+			for (let noteType in data.data.notes) {
+				noteString += `${getNoteTypeFromNumber(noteType)} Notes:\n`
+
+				for(let note of data.data.notes[noteType]) {
+					noteString += `${note}\n\n`
+				}
 			}
-			embed.setDescription(noteString);
+			embed.setDescription(noteString)
 		}
 
 		return await interaction.editReply({
 			embeds: [embed]
 		});
+	}
+}
+
+const getNoteTypeFromNumber = (number: String) => {
+	switch(number) {
+		case("1"):
+			return "Admin"
+		case("2"):
+			return "Merit"
+		case("3"):
+			return "Commander"
+		case("4"):
+			return "Synthetic"
+		case("5"):
+			return "Yautja"
+		default:
+			return ""
 	}
 }
