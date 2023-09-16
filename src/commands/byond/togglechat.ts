@@ -39,7 +39,7 @@ export class UserCommand extends Subcommand {
 
 		await unlockLrc();
 
-		const embed = new EmbedBuilder().setColor('Green').setTitle('LRC Closed');
+		const embed = new EmbedBuilder().setColor('Green').setTitle('LRC Opened');
 		interaction.editReply({ embeds: [embed] });
 	}
 

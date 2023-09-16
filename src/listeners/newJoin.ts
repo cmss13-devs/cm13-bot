@@ -33,5 +33,11 @@ export class NewJoin extends Listener<typeof Events.GuildMemberAdd> {
 		);
 
 		sendChannel.send({ embeds: [embed, button], content: userMention(member.id) });
+		try {
+			member.send({embeds: [embed]})
+		}
+		catch {
+			// it's okay if they don't want our messages, i guess.
+		}
 	}
 }

@@ -103,7 +103,12 @@ export class UserCommand extends Subcommand {
 					noteString += `${note}\n\n`
 				}
 			}
-			embed.setDescription(noteString)
+			try {
+				embed.setDescription(noteString)
+			}
+			catch {
+				embed.setDescription("Notes available, but have to be checked in game.")
+			}
 		}
 
 		return await interaction.editReply({
