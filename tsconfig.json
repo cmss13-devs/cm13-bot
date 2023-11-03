@@ -5,6 +5,7 @@
 		"outDir": "dist",
 		"tsBuildInfoFile": "dist/.tsbuildinfo",
 		"skipLibCheck": true,
+		"moduleResolution": "Node16",
 	},
 	"include": ["src"]
 }
