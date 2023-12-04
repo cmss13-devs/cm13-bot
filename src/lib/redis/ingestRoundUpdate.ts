@@ -9,9 +9,7 @@ export const ingestRoundUpdate = async (message: string, channel: string) => {
 	const data = JSON.parse(message);
 
 	if (data['source'] === process.env.CM13_BOT_GAME_MAIN_INSTANCE) {
-		if (data['type'] === 'round-complete') unlockLrc();
-
-		if (data['type'] === 'round-start') setTimeout(lockLrc, Time.Minute * 15);
+		if (data['type'] === 'round-start') newThread(data.round_id)
 	}
 
 	const channel_msay = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
@@ -103,3 +101,26 @@ export const lockLrc = async () => {
 		avatarURL: process.env.CM13_BOT_DISCORD_WEBHOOK_PROFILE_PICTURE
 	});
 };
+
+const newThread = async (round_id: string) => {
+	const { client } = container;
+	
+	const lastRoundChat = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_TALK_CHANNEL);
+	if (!(lastRoundChat instanceof TextChannel)) return;
+
+	const newThread = await lastRoundChat.threads.create({
+		name: `${round_id}`,
+		autoArchiveDuration: 60,
+		reason: `${round_id} completed.`
+	})
+
+	const newEmbed = new EmbedBuilder();
+	newEmbed.setDescription(`Round ${round_id} completed!`);
+	newEmbed.setTitle('Round Completed');
+	newEmbed.setTimestamp();
+	newEmbed.setColor('Green');
+
+	newThread.send({
+		embeds: [newEmbed],
+	});
+}
