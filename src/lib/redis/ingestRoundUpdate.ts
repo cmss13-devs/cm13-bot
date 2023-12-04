@@ -1,6 +1,5 @@
 import { EmbedBuilder, TextChannel, formatEmoji } from 'discord.js';
 import { container } from '@sapphire/framework';
-import { Time } from '@sapphire/duration';
 
 export const ingestRoundUpdate = async (message: string, channel: string) => {
 	if (!process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL || !process.env.CM13_BOT_GAME_MAIN_INSTANCE || !message || !channel) return;
@@ -114,8 +113,14 @@ const newThread = async (round_id: string) => {
 	newEmbed.setTimestamp();
 	newEmbed.setColor('Green');
 
-	const message = await lastRoundChat.send({
+	const hooks = await lastRoundChat.fetchWebhooks();
+	const webhook = hooks.first();
+	if (!webhook) return;
+
+	const message = await webhook.send({
 		embeds: [newEmbed],
+		username: process.env.CM13_BOT_DISCORD_WEBHOOK_NAME,
+		avatarURL: process.env.CM13_BOT_DISCORD_WEBHOOK_PROFILE_PICTURE
 	});
 
 	message.startThread({
