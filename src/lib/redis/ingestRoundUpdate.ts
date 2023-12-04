@@ -9,7 +9,7 @@ export const ingestRoundUpdate = async (message: string, channel: string) => {
 	const data = JSON.parse(message);
 
 	if (data['source'] === process.env.CM13_BOT_GAME_MAIN_INSTANCE) {
-		if (data['type'] === 'round-start') newThread(data.round_id)
+		if (data['type'] === 'round-complete') newThread(data.round_id)
 	}
 
 	const channel_msay = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
