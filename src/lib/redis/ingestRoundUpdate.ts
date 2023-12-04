@@ -108,19 +108,19 @@ const newThread = async (round_id: string) => {
 	const lastRoundChat = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_TALK_CHANNEL);
 	if (!(lastRoundChat instanceof TextChannel)) return;
 
-	const newThread = await lastRoundChat.threads.create({
-		name: `${round_id}`,
-		autoArchiveDuration: 60,
-		reason: `${round_id} completed.`
-	})
-
 	const newEmbed = new EmbedBuilder();
 	newEmbed.setDescription(`Round ${round_id} completed!`);
 	newEmbed.setTitle('Round Completed');
 	newEmbed.setTimestamp();
 	newEmbed.setColor('Green');
 
-	newThread.send({
+	const message = await lastRoundChat.send({
 		embeds: [newEmbed],
 	});
+
+	message.startThread({
+		name: `${round_id}`,
+		autoArchiveDuration: 60,
+		reason: `${round_id} completed.`
+	})
 }
