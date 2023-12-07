@@ -1,5 +1,6 @@
 import { EmbedBuilder, TextChannel, formatEmoji } from 'discord.js';
 import { container } from '@sapphire/framework';
+import { Time } from '@sapphire/time-utilities';
 
 export const ingestRoundUpdate = async (message: string, channel: string) => {
 	if (!process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL || !process.env.CM13_BOT_GAME_MAIN_INSTANCE || !message || !channel) return;
@@ -128,4 +129,15 @@ const newThread = async (round_id: string) => {
 		autoArchiveDuration: 60,
 		reason: `${round_id} completed.`
 	})
+
+	const threads = await lastRoundChat.threads.fetchActive()
+
+	const fiveHourAgo = Date.now() - (Time.Hour * 5)
+	for(const thread in threads.threads) {
+		const threadEntity = lastRoundChat.threads.cache.get(thread)
+		if(!threadEntity) continue
+
+		if(threadEntity.createdTimestamp < fiveHourAgo)
+			threadEntity.setLocked(true, "Time expired.")
+	}
 }
