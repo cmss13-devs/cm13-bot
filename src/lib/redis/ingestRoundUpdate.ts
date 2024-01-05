@@ -1,4 +1,4 @@
-import { EmbedBuilder, TextChannel, formatEmoji } from 'discord.js';
+import { EmbedBuilder, TextChannel, formatEmoji, roleMention } from 'discord.js';
 import { container } from '@sapphire/framework';
 import { Time } from '@sapphire/time-utilities';
 
@@ -13,6 +13,10 @@ export const ingestRoundUpdate = async (message: string, channel: string) => {
 			if (data.round_id) newThread(data.round_id, data.round_name)
 			else newThread(data.round_id)
 		}
+	}
+
+	if (data.type == "predator-round") {
+		await handlePredatorRound(data.round_id)
 	}
 
 	const channel_msay = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
@@ -144,4 +148,24 @@ const newThread = async (round_id: string, round_name?: string) => {
 		if(threadEntity.createdTimestamp < fiveHourAgo)
 			threadEntity.setLocked(true, "Time expired.")
 	}
+}
+
+const handlePredatorRound = async (round_id: string) => {
+	const { client } = container;
+
+	if(!process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_CHANNEL) return
+	
+	const channel = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_CHANNEL)
+	if(!(channel instanceof TextChannel)) return
+
+	const notificationEmbed = new EmbedBuilder();
+	notificationEmbed.setDescription(`Round ${round_id} is a Predator Round. You may Join the Hunt!`)
+	notificationEmbed.setTitle('Predator Round')
+	notificationEmbed.setTimestamp()
+	notificationEmbed.setColor('DarkGreen')
+
+	await channel.send({
+		content: `${roleMention(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE)}`,
+		embeds: [notificationEmbed]
+	})
 }
