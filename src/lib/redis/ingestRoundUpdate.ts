@@ -158,14 +158,20 @@ const handlePredatorRound = async (round_id: string) => {
 	const channel = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_CHANNEL)
 	if(!(channel instanceof TextChannel)) return
 
+	const hooks = await channel.fetchWebhooks();
+	const webhook = hooks.first();
+	if (!webhook) return;
+
 	const notificationEmbed = new EmbedBuilder();
 	notificationEmbed.setDescription(`Round ${round_id} is a Predator Round. You may Join the Hunt!`)
 	notificationEmbed.setTitle('Predator Round')
 	notificationEmbed.setTimestamp()
 	notificationEmbed.setColor('DarkGreen')
 
-	await channel.send({
+	await webhook.send({
 		content: `${roleMention(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE)}`,
-		embeds: [notificationEmbed]
+		embeds: [notificationEmbed],
+		username: process.env.CM13_BOT_DISCORD_YAUTJA_WEBHOOK_NAME,
+		avatarURL: process.env.CM13_BOT_DISCORD_YAUTJA_WEBHOOK_PROFILE_PICTURE
 	})
 }
