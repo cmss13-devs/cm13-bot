@@ -169,7 +169,7 @@ const handlePredatorRound = async (round_id: string) => {
 	notificationEmbed.setColor('DarkGreen')
 
 	await webhook.send({
-		content: `${roleMention(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE)}`,
+		content: `${roleMention(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_PING_ROLE)}`,
 		embeds: [notificationEmbed],
 		username: process.env.CM13_BOT_DISCORD_YAUTJA_WEBHOOK_NAME,
 		avatarURL: process.env.CM13_BOT_DISCORD_YAUTJA_WEBHOOK_PROFILE_PICTURE
