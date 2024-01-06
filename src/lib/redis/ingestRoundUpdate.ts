@@ -1,6 +1,7 @@
 import { EmbedBuilder, TextChannel, formatEmoji, roleMention } from 'discord.js';
 import { container } from '@sapphire/framework';
 import { Time } from '@sapphire/time-utilities';
+import { fetchOrCreateHook } from '../discord/webhook';
 
 export const ingestRoundUpdate = async (message: string, channel: string) => {
 	if (!process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL || !process.env.CM13_BOT_GAME_MAIN_INSTANCE || !message || !channel) return;
@@ -16,7 +17,7 @@ export const ingestRoundUpdate = async (message: string, channel: string) => {
 	}
 
 	if (data.type == "predator-round") {
-		await handlePredatorRound(data.round_id)
+		await handlePredatorRound(data.round_id, data.map)
 	}
 
 	const channel_msay = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
@@ -64,9 +65,7 @@ export const unlockLrc = async () => {
 	newEmbed.setTimestamp();
 	newEmbed.setColor('Green');
 
-	const hooks = await lastRoundChat.fetchWebhooks();
-	const webhook = hooks.first();
-	if (!webhook) return;
+	const webhook = await fetchOrCreateHook(lastRoundChat)
 
 	webhook.send({
 		embeds: [newEmbed],
@@ -98,9 +97,7 @@ export const lockLrc = async () => {
 	newEmbed.setTimestamp();
 	newEmbed.setColor('Red');
 
-	const hooks = await lastRoundChat.fetchWebhooks();
-	const webhook = hooks.first();
-	if (!webhook) return;
+	const webhook = await fetchOrCreateHook(lastRoundChat)
 
 	webhook.send({
 		embeds: [newEmbed],
@@ -121,9 +118,7 @@ const newThread = async (round_id: string, round_name?: string) => {
 	newEmbed.setTimestamp();
 	newEmbed.setColor('Green');
 
-	const hooks = await lastRoundChat.fetchWebhooks();
-	const webhook = hooks.first();
-	if (!webhook) return;
+	const webhook = await fetchOrCreateHook(lastRoundChat)
 
 	const message = await webhook.send({
 		embeds: [newEmbed],
@@ -150,7 +145,7 @@ const newThread = async (round_id: string, round_name?: string) => {
 	}
 }
 
-const handlePredatorRound = async (round_id: string) => {
+const handlePredatorRound = async (round_id: string, map_name?: string) => {
 	const { client } = container;
 
 	if(!process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_CHANNEL) return
@@ -158,12 +153,10 @@ const handlePredatorRound = async (round_id: string) => {
 	const channel = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_CHANNEL)
 	if(!(channel instanceof TextChannel)) return
 
-	const hooks = await channel.fetchWebhooks();
-	const webhook = hooks.first();
-	if (!webhook) return;
+	const webhook = await fetchOrCreateHook(channel)
 
 	const notificationEmbed = new EmbedBuilder();
-	notificationEmbed.setDescription(`Round ${round_id} is a Predator Round. You may Join the Hunt!`)
+	notificationEmbed.setDescription(`Round ${round_id} is a Predator Round. You may Join the Hunt! Current map: ${map_name}`)
 	notificationEmbed.setTitle('Predator Round')
 	notificationEmbed.setTimestamp()
 	notificationEmbed.setColor('DarkGreen')
