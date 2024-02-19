@@ -5,6 +5,7 @@ import { queryDatabase } from "../../lib/byond/queryGame";
 import { failQuery } from "../../lib/byond/failQuery";
 import { EmbedBuilder, userMention } from "discord.js";
 import { setupRoles } from "../../lib/byond/setupRoles";
+import { removeAllRoles } from "../../lib/discord/removeAllRoles";
 
 @ApplyOptions<Command.Options>({
 	description: "Refresh a user's roles."
@@ -72,6 +73,7 @@ export class UserCommand extends Subcommand {
         const user = this.container.client.users.cache.get(discord_id)
         if(!user) return await failQuery(interaction, "Could not find Discord user.")
 
+        await removeAllRoles(user, `Manually requested refresh by ${interaction.user}`)
         await setupRoles(user, data.data.roles, `Manually requested refresh by ${interaction.user}.`)
 
 		return await interaction.editReply(`Manually refreshed roles for ${userMention(discord_id)}.`)
