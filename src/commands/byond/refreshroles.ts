@@ -6,6 +6,9 @@ import { failQuery } from "../../lib/byond/failQuery";
 import { EmbedBuilder, userMention } from "discord.js";
 import { setupRoles } from "../../lib/byond/setupRoles";
 import { removeAllRoles } from "../../lib/discord/removeAllRoles";
+import { removeRole } from "../../lib/discord/removeRole";
+import { processWhitelist } from "../../lib/byond/processWhitelist";
+import { addRoles } from "../../lib/discord/addRoles";
 
 @ApplyOptions<Command.Options>({
 	description: "Refresh a user's roles."
@@ -73,8 +76,14 @@ export class UserCommand extends Subcommand {
         const user = this.container.client.users.cache.get(discord_id)
         if(!user) return await failQuery(interaction, "Could not find Discord user.")
 
-        await removeAllRoles(user, `Manually requested refresh by ${interaction.user}`)
-        await setupRoles(user, data.data.roles, `Manually requested refresh by ${interaction.user}.`)
+        const toRemove = []
+        if (process.env.CM13_BOT_DISCORD_GUILD_SYNTHETIC_ROLE) toRemove.push(user, process.env.CM13_BOT_DISCORD_GUILD_SYNTHETIC_ROLE)
+        if (process.env.CM13_BOT_DISCORD_GUILD_COMMANDER_ROLE) toRemove.push(user, process.env.CM13_BOT_DISCORD_GUILD_COMMANDER_ROLE)
+        if (process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE) toRemove.push(user, process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE)
+        await removeRole(user, toRemove, `Manually requested refresh by ${interaction.user.username}.`)
+
+        const whitelists = processWhitelist(data.data.roles);
+        await addRoles(user, whitelists, `Manually requested refresh by ${interaction.user.username}.`)
 
 		return await interaction.editReply(`Manually refreshed roles for ${userMention(discord_id)}.`)
 	}
