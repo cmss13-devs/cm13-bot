@@ -73,6 +73,8 @@ export class UserCommand extends Subcommand {
 	public async refreshDataResponse(interaction: Subcommand.ChatInputCommandInteraction, data: any, discord_id: string | null) {
 		if (data.statuscode !== 200 || !discord_id) return await failQuery(interaction, data.response);
 
+        this.container.logger.debug(data)
+
         const user = this.container.client.users.cache.get(discord_id)
         if(!user) return await failQuery(interaction, "Could not find Discord user.")
 
@@ -82,8 +84,10 @@ export class UserCommand extends Subcommand {
         if (process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE) toRemove.push(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE)
         await removeRole(user, toRemove, `Manually requested refresh by ${interaction.user.username}.`)
 
-        const whitelists = processWhitelist(data.data.roles);
-        await addRoles(user, whitelists, `Manually requested refresh by ${interaction.user.username}.`)
+        if(data.data.roles) {
+            const whitelists = processWhitelist(data.data.roles);
+            await addRoles(user, whitelists, `Manually requested refresh by ${interaction.user.username}.`)
+        }
 
 		return await interaction.editReply(`Manually refreshed roles for ${userMention(discord_id)}.`)
 	}
