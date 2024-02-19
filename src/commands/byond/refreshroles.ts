@@ -77,9 +77,9 @@ export class UserCommand extends Subcommand {
         if(!user) return await failQuery(interaction, "Could not find Discord user.")
 
         const toRemove = []
-        if (process.env.CM13_BOT_DISCORD_GUILD_SYNTHETIC_ROLE) toRemove.push(user, process.env.CM13_BOT_DISCORD_GUILD_SYNTHETIC_ROLE)
-        if (process.env.CM13_BOT_DISCORD_GUILD_COMMANDER_ROLE) toRemove.push(user, process.env.CM13_BOT_DISCORD_GUILD_COMMANDER_ROLE)
-        if (process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE) toRemove.push(user, process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE)
+        if (process.env.CM13_BOT_DISCORD_GUILD_SYNTHETIC_ROLE) toRemove.push(process.env.CM13_BOT_DISCORD_GUILD_SYNTHETIC_ROLE)
+        if (process.env.CM13_BOT_DISCORD_GUILD_COMMANDER_ROLE) toRemove.push(process.env.CM13_BOT_DISCORD_GUILD_COMMANDER_ROLE)
+        if (process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE) toRemove.push(process.env.CM13_BOT_DISCORD_GUILD_YAUTJA_ROLE)
         await removeRole(user, toRemove, `Manually requested refresh by ${interaction.user.username}.`)
 
         const whitelists = processWhitelist(data.data.roles);
