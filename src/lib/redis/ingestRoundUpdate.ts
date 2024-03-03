@@ -14,10 +14,10 @@ export const ingestRoundUpdate = async (message: string, channel: string) => {
 			if (data.round_id) newThread(data.round_id, data.round_name)
 			else newThread(data.round_id)
 		}
-	}
 
-	if (data.type == "predator-round") {
-		await handlePredatorRound(data.round_id, data.map)
+		if (data.type == "predator-round") {
+			await handlePredatorRound(data.round_id, data.map)
+		}
 	}
 
 	const channel_msay = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_MOD_CHANNEL);
