@@ -11,7 +11,7 @@ export class UserEvent extends Listener<typeof Events.MessageCreate> {
 			return;
 		}
 
-		if (process.env.CM13_BOT_THREAD_CHANNEL && message.channelId === process.env.CM13_BOT_THREAD_CHANNEL) {
+		if (container.threadChannels.includes(message.channelId)) {
 			message.startThread({ name: `${message.embeds.length ? message.embeds[0].author?.name : '@unknown'}` });
 			return;
 		}

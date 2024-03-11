@@ -35,6 +35,8 @@ const client = new SapphireClient({
 	loadMessageCommandListeners: true
 });
 
+container.threadChannels = process.env.CM13_BOT_THREAD_CHANNEL.split(",");
+
 container.redisPub = createClient({
 	url: process.env.CM13_BOT_REDIS_URL
 });
@@ -77,6 +79,7 @@ declare module '@sapphire/pieces' {
 	interface Container {
 		redisSub: RedisClientType;
 		redisPub: RedisClientType;
+		threadChannels: String[];
 		processingEnquiry: boolean;
 	}
 }
