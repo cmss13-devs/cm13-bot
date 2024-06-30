@@ -65,8 +65,12 @@ const autoBanUser = (message: Message) => {
 		return;
 	}
 
-	message.guild.bans.create(message.author, {
-		reason: `Made a post in bot trap channel: \`${message.content}\``
-	})
+	try {
+		message.guild.bans.create(message.author, {
+			reason: `Made a post in bot trap channel: \`${message.content}\``
+		})
+	} catch {
+		container.logger.info(`Unable to ban user ${message.author}.`)
+	}
 	message.delete();
 }
