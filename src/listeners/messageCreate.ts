@@ -6,6 +6,12 @@ import { container } from '@sapphire/framework';
 
 export class UserEvent extends Listener<typeof Events.MessageCreate> {
 	public async run(message: Message) {
+		if(process.env.CM13_BOT_BAN_CHANNEL && message.channelId === process.env.CM13_BOT_BAN_CHANNEL) {
+			autoBanUser(message);
+			return;
+		}
+
+
 		if (process.env.CM13_BOT_PUBLISH_CHANNEL && message.channelId === process.env.CM13_BOT_PUBLISH_CHANNEL) {
 			message.crosspost();
 			return;
@@ -52,4 +58,15 @@ export class UserEvent extends Listener<typeof Events.MessageCreate> {
 				})
 			);
 	}
+}
+
+const autoBanUser = (message: Message) => {
+	if(message.author.bot) {
+		return;
+	}
+
+	message.guild.bans.create(message.author, {
+		reason: "Made a post in bot trap channel."
+	})
+	message.delete();
 }
