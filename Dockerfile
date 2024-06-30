@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:20-alpine
 
 WORKDIR /home/discord_bot
 COPY src/ /home/discord_bot/src/
