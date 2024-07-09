@@ -3,6 +3,7 @@ import { Listener } from '@sapphire/framework';
 import type { Message } from 'discord.js';
 import { TextChannel } from 'discord.js';
 import { container } from '@sapphire/framework';
+import { Time } from '@sapphire/time-utilities';
 
 export class UserEvent extends Listener<typeof Events.MessageCreate> {
 	public async run(message: Message) {
@@ -67,6 +68,7 @@ const autoBanUser = (message: Message) => {
 
 	try {
 		message.guild.bans.create(message.author, {
+			deleteMessageSeconds: 60 * 60,
 			reason: `Made a post in bot trap channel: \`${message.content}\``
 		})
 	} catch {
