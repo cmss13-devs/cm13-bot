@@ -1,6 +1,6 @@
 import './lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
-import { GatewayIntentBits, Partials } from 'discord.js';
+import { EmbedBuilder, GatewayIntentBits, Partials, TextChannel } from 'discord.js';
 import { container } from '@sapphire/framework';
 import type { RedisClientType } from 'redis';
 import { createClient } from 'redis';
@@ -10,6 +10,10 @@ import { ingestRoundUpdate } from './lib/redis/ingestRoundUpdate';
 import { ingestConnection } from './lib/redis/ingestConnection';
 import { ingestTicket } from './lib/redis/ingestTicket';
 import { ingestLogs } from './lib/redis/ingestLogs';
+import { sleep } from '@sapphire/utilities';
+import { Time } from '@sapphire/time-utilities';
+import { queryDatabase } from './lib/byond/queryGame';
+import { renderEmbed } from './commands/byond/status';
 
 const client = new SapphireClient({
 	defaultPrefix: '/',
@@ -56,9 +60,38 @@ const main = async () => {
 	}
 
 	if (process.env.CM13_BOT_REDIS_URL) setupRedis();
+	if (process.env.CM13_BOT_STATUS_CHANNEL) statusChannel();
 };
 
 main();
+
+const statusChannel = () => {
+	while(true) {
+		updateStatusChannel()
+		sleep(1 * Time.Minute)
+	}
+}
+
+const updateStatusChannel = async () => {
+	const channel = container.client.channels.cache.get(process.env.CM13_BOT_STATUS_CHANNEL) as TextChannel
+	if(!channel) {
+		return
+	}
+
+	const data = await queryDatabase('status_authed');
+
+	if(data.statuscode !== 200) return
+
+	const embed = renderEmbed(data)
+	let message = channel.messages.cache.last()
+
+	if(!message || !message.editable) {
+		channel.send({embeds: [embed], content: ""})
+	}
+
+	message.edit({embeds: [embed], content: ""})
+
+}
 
 const setupRedis = async () => {
 	const { redisPub, redisSub } = container;
