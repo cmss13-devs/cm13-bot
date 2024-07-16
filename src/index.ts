@@ -84,7 +84,7 @@ const updateStatusChannel = async () => {
 	let message = channel.messages.cache.last()
 
 	if(!message || !message.editable) {
-		channel.send({embeds: [embed], content: ""})
+		return await channel.send({embeds: [embed], content: ""})
 	}
 
 	message.edit({embeds: [embed], content: ""})
