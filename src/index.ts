@@ -66,10 +66,8 @@ const main = async () => {
 main();
 
 const statusChannel = () => {
-	while(true) {
-		updateStatusChannel()
-		sleep(1 * Time.Minute)
-	}
+	updateStatusChannel()
+	setTimeout(() => statusChannel(), 1 * Time.Minute)
 }
 
 const updateStatusChannel = async () => {
