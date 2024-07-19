@@ -81,14 +81,18 @@ const updateStatusChannel = async () => {
 	if(data.statuscode !== 200) return
 
 	const embed = renderEmbed(data)
-	let message = channel.messages.cache.last()
 
-	if(!message || !message.editable) {
-		return await channel.send({embeds: [embed], content: ""})
-	}
+	channel.messages.fetch({ limit: 1, cache: false }).then((collection) => {
+		const message = collection.last()
 
-	message.edit({embeds: [embed], content: ""})
+		if(!message || !message.editable) {
+			message.delete()
+			channel.send({content: "", embeds: [embed]})
+			return
+		}
 
+		message.edit({embeds: [embed], content: ""})
+	})
 }
 
 const setupRedis = async () => {
