@@ -39,7 +39,7 @@ const client = new SapphireClient({
 	loadMessageCommandListeners: true
 });
 
-container.threadChannels = process.env.CM13_BOT_THREAD_CHANNEL.split(",");
+container.threadChannels = process.env.CM13_BOT_THREAD_CHANNEL ? process.env.CM13_BOT_THREAD_CHANNEL.split(",") : undefined;
 
 container.redisPub = createClient({
 	url: process.env.CM13_BOT_REDIS_URL

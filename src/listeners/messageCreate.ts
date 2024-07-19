@@ -18,7 +18,7 @@ export class UserEvent extends Listener<typeof Events.MessageCreate> {
 			return;
 		}
 
-		if (container.threadChannels.includes(message.channelId)) {
+		if (container.threadChannels?.includes(message.channelId)) {
 			message.startThread({ name: `${message.embeds.length ? message.embeds[0].author?.name : '@unknown'}` });
 			return;
 		}
