@@ -1,4 +1,4 @@
-import { EmbedBuilder, TextChannel, formatEmoji } from 'discord.js';
+import { EmbedBuilder, TextChannel, formatEmoji, roleMention } from 'discord.js';
 import { container } from '@sapphire/framework';
 
 export const ingestAccess = async (message: string, channel: string) => {
@@ -14,14 +14,6 @@ export const ingestAccess = async (message: string, channel: string) => {
 
 	const data = JSON.parse(message);
 
-	if(process.env.CM13_BOT_DISCORD_EMOJI_RED && process.env.CM13_BOT_DISCORD_EMOJI_GREEN) {
-		const emojiToSend = `${data.type === 'login' ? formatEmoji(process.env.CM13_BOT_DISCORD_EMOJI_GREEN) : formatEmoji(process.env.CM13_BOT_DISCORD_EMOJI_RED)}`
-		const sourceString = `\`${data.key}\`@\`${data.source}\``
-		const body = `Logged ${data.type === 'login' ? 'in' : 'out'} with ${data.remaining} staff online. (${data.afk} AFK)`
-		channelToUse.send(`${emojiToSend} ${sourceString}: ${body}`)
-		return
-	}
-
 	const embedToSend = new EmbedBuilder();
 	embedToSend.setAuthor({ name: `${data['key']}` });
 	embedToSend.setColor(data['type'] === 'login' ? 'Green' : 'Red');
@@ -30,5 +22,28 @@ export const ingestAccess = async (message: string, channel: string) => {
 	embedToSend.setFooter({ text: `@${data['source']}` });
 
 	channelToUse.send({ embeds: [embedToSend] });
+
+	if(!process.env.CM13_BOT_DISCORD_GUILD_ALERT_CHANNEL) return;
+
+	if(data.type === "login" || data.remaining - data.afk >= 2) return
+
+	const emptyChannel = client.channels.cache.get(process.env.CM13_BOT_DISCORD_GUILD_ALERT_CHANNEL);
+
+	if(!(emptyChannel instanceof TextChannel)) return;
+
+	const toPing = process.env.CM13_BOT_DISCORD_GUILD_ALERT_PINGS.split(',')
+
+	var pingString = "";
+	toPing.forEach(element => {
+		pingString = pingString + roleMention(element) + " ";
+	});
+
+	const serverEmpty = new EmbedBuilder();
+	serverEmpty.setColor('DarkRed')
+	serverEmpty.setDescription("Only 1 member of staff remaining on the server.")
+	serverEmpty.setTimestamp();
+	serverEmpty.setFooter({ text: `@${data.source}` });
+
+	emptyChannel.send({ embeds: [embedToSend], content: pingString })
 
 };
