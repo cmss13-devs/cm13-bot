@@ -116,5 +116,6 @@ declare module '@sapphire/pieces' {
 		redisPub: RedisClientType;
 		threadChannels: String[];
 		processingEnquiry: boolean;
+		cooldownPing: number;
 	}
 }
