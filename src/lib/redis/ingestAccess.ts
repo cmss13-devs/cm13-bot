@@ -47,7 +47,7 @@ export const ingestAccess = async (message: string, channel: string) => {
 	serverEmpty.setTimestamp();
 	serverEmpty.setFooter({ text: `@${data.source}` });
 
-	emptyChannel.send({ embeds: [embedToSend], content: pingString })
+	emptyChannel.send({ embeds: [serverEmpty], content: pingString })
 
 	container.cooldownPing = Date.now()
 
