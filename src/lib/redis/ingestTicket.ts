@@ -26,7 +26,8 @@ export const ingestTicket = async (message: string, channel: string) => {
 	}
 
 	const embedToSend = new EmbedBuilder();
-	embedToSend.setAuthor({ name: `#${data['ticket-id']}: ${author}`, url: `https://db.cm-ss13.com/#/ticket/${data.round_id}/${data['ticket-id']}` });
+	embedToSend.setTitle(`#${data['ticket-id']}: ${author}`);
+	embedToSend.setURL(`https://db.cm-ss13.com/#/ticket/${data.round_id}/${data['ticket-id']}`)
 	embedToSend.setDescription(`${data['message']}`);
 	embedToSend.setColor('DarkAqua');
 	embedToSend.setTimestamp();
