@@ -86,7 +86,7 @@ const updateStatusChannel = async () => {
 		const message = collection.last()
 
 		if(!message || !message.editable) {
-			message.delete()
+			message?.delete()
 			channel.send({content: "", embeds: [embed]})
 			return
 		}
