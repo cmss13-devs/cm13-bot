@@ -60,7 +60,7 @@ export class UserCommand extends Command {
 			let formattedTestmerges = "";
 		
 			for (const testmerge of data.data.testmerges) {
-				formattedTestmerges += `[${testmerge.title} (#${testmerge.number})](${testmerge.url})\n`
+				formattedTestmerges += `- [${testmerge.title} (#${testmerge.number})](${testmerge.url})\n`
 			}
 
 			embeds.push(new EmbedBuilder().setTitle("Current Testmerges").setDescription(formattedTestmerges))
