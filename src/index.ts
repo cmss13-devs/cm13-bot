@@ -80,18 +80,28 @@ const updateStatusChannel = async () => {
 
 	if(data.statuscode !== 200) return
 
-	const embed = renderEmbed(data)
+	const embeds = [renderEmbed(data)]
+
+	if(data.data.testmerges) {
+		let formattedTestmerges = "";
+	
+		for (const testmerge of data.data.testmerges) {
+			formattedTestmerges += `[${testmerge.title} (#${testmerge.number})](${testmerge.url})\n`
+		}
+
+		embeds.push(new EmbedBuilder().setTitle("Current Testmerges").setDescription(formattedTestmerges))
+	}
 
 	channel.messages.fetch({ limit: 1, cache: false }).then((collection) => {
 		const message = collection.last()
 
 		if(!message || !message.editable) {
 			message?.delete()
-			channel.send({content: "", embeds: [embed]})
+			channel.send({content: "", embeds: embeds})
 			return
 		}
 
-		message.edit({embeds: [embed], content: ""})
+		message.edit({embeds: embeds, content: ""})
 	})
 }
 

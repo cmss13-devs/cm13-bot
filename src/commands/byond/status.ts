@@ -54,13 +54,24 @@ export class UserCommand extends Command {
 			return await interaction.editReply({ content: `Lookup unsuccessful: ${data.response}` });
 		}
 
-		const embed = renderEmbed(data)
+		const embeds = [renderEmbed(data)]
 
-		return await interaction.editReply({ embeds: [embed], content: '' });
+		if(data.data.testmerges) {
+			let formattedTestmerges = "";
+		
+			for (const testmerge of data.data.testmerges) {
+				formattedTestmerges += `[${testmerge.title} (#${testmerge.number})](${testmerge.url})\n`
+			}
+
+			embeds.push(new EmbedBuilder().setTitle("Current Testmerges").setDescription(formattedTestmerges))
+		}
+
+		return await interaction.editReply({ embeds: embeds, content: '' });
 	}
 }
 
 export const renderEmbed = (data) => {
+
 	return new EmbedBuilder().setAuthor({ name: `Round #${data.data.round_id}` }).addFields(
 		{ name: 'Mode', value: `${data.data.mode}`, inline: true },
 		{ name: 'Players', value: `${data.data.players}`, inline: true },
